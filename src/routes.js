@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './pages/Home.vue';
 import Product from './pages/Product.vue';
+import Login from './pages/Login.vue';
 import page404 from './pages/error/404.vue';
 
 Vue.use(Router);
@@ -16,6 +17,10 @@ export default new Router({
     {
       path: `/product/:id_product`,
       component: Product
+    },
+    {
+      path: '/login',
+      component: Login
     },
     {
       path: '/*',

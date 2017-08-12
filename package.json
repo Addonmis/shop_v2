@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "bcrypt-as-promised": "^1.1.0",
     "body-parser": "^1.17.2",
     "bulma": "^0.4.3",
     "compression-webpack-plugin": "^1.0.0",
@@ -17,11 +18,14 @@
     "express": "^4.15.4",
     "express-session": "^1.15.5",
     "jade": "^1.11.0",
+    "jsonwebtoken": "^7.4.2",
     "mariasql": "^0.2.6",
     "mariasql-promise": "^2.0.0",
     "morgan": "^1.8.2",
     "vue": "^2.4.2",
-    "vue-router": "^2.7.0"
+    "vue-router": "^2.7.0",
+    "vuex": "^2.3.1",
+    "vuex-router-sync": "^4.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
