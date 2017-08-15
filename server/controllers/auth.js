@@ -5,7 +5,6 @@ import config from '../config';
 import maria from '../config/db';
 // signin
 export const signin = async (req, res, next) => {
-	console.log(req.body);
 	const {username, password} = req.body;
 	const user = await maria.query('select * from users where username = ?', [username]).then((rows) => rows);
 	if (!user.length){
@@ -23,7 +22,6 @@ export const signin = async (req, res, next) => {
 		});
 	}
 	const token = jwt.sign({_id: user[0].id_user}, config.secret);
-	console.log(token);
 	res.json(token);
 };
 
@@ -35,13 +33,14 @@ export const signup = async (req, res, next) => {
 		const salt = await bcrypt.genSalt(10);
 		const hash = await bcrypt.hash(req.body.password, salt);
 
-		user = await maria.query('insert into users(username, password, id_role) values(?, ?, 3);', [req.body.username, hash]);
+		await maria.query('insert into users(username, password, id_role) values(?, ?, 3);', [req.body.username, hash]);
+		user = await maria.query('select id_user, username, password, id_role from users order by id_user desc limit 1;').then((rows) => rows);
 	} catch({message}){
 		return next({
 			status: 400,
 			message
 		});
 	}
-
-	res.json({user});
+	const token = jwt.sign({_id: user[0].id_user}, config.secret);
+	res.json(token);
 };
