@@ -1,11 +1,18 @@
 import bcrypt from 'bcrypt-as-promised';
 import jwt from 'jsonwebtoken';
 
+import * as validator from '../services/validator';
 import config from '../config';
 import maria from '../config/db';
 // signin
 export const signin = async (req, res, next) => {
 	const {username, password} = req.body;
+	if (!validator.validation(username, password).isValid){
+		return next({
+			status: 401,
+			message: validator.validation(username, password).error
+		});
+	}
 	const user = await maria.query('select * from users where username = ?', [username]).then((rows) => rows);
 	if (!user.length){
 		return next({
@@ -22,13 +29,18 @@ export const signin = async (req, res, next) => {
 		});
 	}
 	const token = jwt.sign({_id: user[0].id_user}, config.secret);
-	res.json(token);
+	res.json({token: token, user_role: user[0].id_role});
 };
 
 // signup
 export const signup = async (req, res, next) => {
 	let user;
-
+	if (!validator.validation(req.body.username, req.body.password).isValid){
+		return next({
+			status: 401,
+			message: validator.validation(req.body.username, req.body.password).error
+		});
+	}
 	try{
 		const salt = await bcrypt.genSalt(10);
 		const hash = await bcrypt.hash(req.body.password, salt);
@@ -42,5 +54,5 @@ export const signup = async (req, res, next) => {
 		});
 	}
 	const token = jwt.sign({_id: user[0].id_user}, config.secret);
-	res.json(token);
+	res.json({token: token, user_role: user[0].id_role});
 };

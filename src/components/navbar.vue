@@ -7,9 +7,18 @@
     .nav-center
       router-link(to="/").nav-item.is-brand Shop
     .nav-right
-      router-link(to="/login")
+      router-link(v-if="!$store.state.user.authUser" to="/login")
         span.nav-item
           .button Login
+      router-link(v-else-if="$store.state.user.userRole == 1" to="/admin")
+        span.nav-item
+          .button Account
+      router-link(v-else-if="$store.state.user.userRole == 2" to="/manager")
+        span.nav-item
+          .button Account
+      router-link(v-else-if="$store.state.user.userRole == 3" to="/user")
+        span.nav-item
+          .button Account
       a(@click="logout" v-if="$store.state.user.authUser")
         span.nav-item
           .button Logout

@@ -1,9 +1,9 @@
 <template lang="jade">
 	.container
-		article(v-if="formError").meassage.is-danger
+		article(v-if="formError").message.is-danger
 			.message-body
 				span {{formError}}
-		article(v-if="message").meassage.is-danger
+		article(v-if="message").message.is-danger
 			.message-body
 				span {{message}}
 		.auth_wrap.box
@@ -92,12 +92,17 @@ export default {
 					username: this.formUsername,
 					password: this.formPassword
 				})
-				.then(() => {
+				.then((res) => {
 					this.formUsername = ''
 					this.formPassword = ''
 					this.formRePassword = ''
 					this.formError = null
-					this.message = "Access"
+					if (res === "Access"){
+						this.message = res;
+					}
+					if (res === "Bad credentials"){
+						this.formError = res;
+					}
 				})
 				.catch((e) => {
 					this.formError = e.message
@@ -117,7 +122,9 @@ export default {
 					this.formPassword = ''
 					this.formRePassword = ''
 					this.formError = null
-					this.message = "Access"
+					if (this.$store.state.user.authUser){
+						this.message = "Access"
+					}
 				})
 				.catch((e) => {
 					this.formError = e.message

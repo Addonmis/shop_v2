@@ -10,6 +10,9 @@ import checkToken from './middlewares/checkToken';
 import authRoute from './routes/auth';
 import homeRoute from './routes/home';
 import productRoute from './routes/product';
+import userRoute from './routes/user';
+import adminRoute from './routes/admin';
+import managerRoute from './routes/manager';
 import config from './config';
 import webpackConfig from './config/webpackConfig';
 
@@ -38,7 +41,9 @@ webpackConfig(app);
 app.use('/api', authRoute);
 app.use('/api', homeRoute);
 app.use('/api', productRoute);
-app.get('/testic', (req, res) => res.json("test"));
+app.use('/api', checkToken, userRoute);
+app.use('/api', checkToken, adminRoute);
+app.use('/api', checkToken, managerRoute);
 app.get('/api/token', checkToken, (req, res) => {console.log(req.token); res.json("token")});
 app.get("/*", (req, res) => {
 	res.sendFile(path.join(__dirname, "../index.html"));
